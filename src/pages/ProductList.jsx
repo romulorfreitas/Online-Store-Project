@@ -14,13 +14,9 @@ class ProductList extends React.Component {
     categoryList: [],
   };
 
-  onChangeHandler = ({ target }) => {
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({
-      [name]: value,
-    });
-  };
+  componentDidMount() {
+    this.fetchCategories();
+  }
 
   onSumbitHandler = async () => {
     const { search } = this.state;
@@ -33,10 +29,16 @@ class ProductList extends React.Component {
           this.setState({ loading: false, found: false });
         }
       });
+    });
+  };
 
-  componentDidMount() {
-    this.fetchCategories();
-  }
+  onChangeHandler = ({ target }) => {
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      [name]: value,
+    });
+  };
 
   fetchCategories = async () => {
     const categories = await api.getCategories();
