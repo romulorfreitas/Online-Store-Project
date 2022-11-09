@@ -1,6 +1,7 @@
 import React from 'react';
 import CartButton from '../components/CartButton';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import SideBar from '../components/SideBar';
+import * as api from '../services/api';
 import Loading from '../components/Loading';
 import ProductCard from '../components/ProductCard';
 
@@ -10,6 +11,7 @@ class ProductList extends React.Component {
     returnedProduct: [],
     loading: false,
     found: true,
+    categoryList: [],
   };
 
   onChangeHandler = ({ target }) => {
@@ -23,7 +25,7 @@ class ProductList extends React.Component {
   onSumbitHandler = async () => {
     const { search } = this.state;
     this.setState({ loading: true }, async () => {
-      const returnedProduct = await getProductsFromCategoryAndQuery(null, search);
+      const returnedProduct = await api.getProductsFromCategoryAndQuery(null, search);
       this.setState({ search: '', returnedProduct: returnedProduct.results }, () => {
         if (returnedProduct.results.length !== 0) {
           this.setState({ returnedProduct: returnedProduct.results, loading: false });
@@ -31,11 +33,20 @@ class ProductList extends React.Component {
           this.setState({ loading: false, found: false });
         }
       });
+
+  componentDidMount() {
+    this.fetchCategories();
+  }
+
+  fetchCategories = async () => {
+    const categories = await api.getCategories();
+    this.setState({
+      categoryList: categories,
     });
   };
 
   render() {
-    const { returnedProduct, loading, found } = this.state;
+    const { returnedProduct, loading, found, categoryList } = this.state;
     const notFound = 'Nenhum produto foi encontrado';
 
     if (loading) {
@@ -62,6 +73,13 @@ class ProductList extends React.Component {
             Procurar
           </button>
         </form>
+        <ul>
+          { categoryList.map((categories) => (<SideBar
+            key={ categories.id }
+            name={ categories.name }
+            category={ categories.id }
+          />))}
+        </ul>
         <CartButton />
         { !found ? <p>{ notFound }</p> : returnedProduct.map((product) => (
           <ProductCard
