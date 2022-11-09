@@ -66,7 +66,9 @@ class ProductList extends React.Component {
         { !found ? <p>{ notFound }</p> : returnedProduct.map((product) => (
           <ProductCard
             key={ product.id }
-            product={ product }
+            price={ product.price }
+            title={ product.title }
+            thumbnail={ product.thumbnail }
           />))}
       </div>
     );
