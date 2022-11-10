@@ -105,8 +105,10 @@ class ProductList extends React.Component {
             key={ product.id }
             price={ product.price }
             title={ product.title }
+            id={ product.id }
             thumbnail={ product.thumbnail }
-          />))}
+          />
+        ))}
       </div>
     );
   }
