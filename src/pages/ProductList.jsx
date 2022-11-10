@@ -12,6 +12,7 @@ class ProductList extends React.Component {
     loading: false,
     found: true,
     categoryList: [],
+    categorySeacrh: '',
   };
 
   componentDidMount() {
@@ -44,6 +45,21 @@ class ProductList extends React.Component {
     const categories = await api.getCategories();
     this.setState({
       categoryList: categories,
+    });
+  };
+
+  categoryButtton = ({ target }) => {
+    const { textContent } = target;
+    this.setState({
+      categorySeacrh: textContent,
+    }, () => this.fetchApibyCategory());
+  };
+
+  fetchApibyCategory = async () => {
+    const { categorySeacrh } = this.state;
+    const getProducts = await api.getProductsFromCategoryAndQuery(null, categorySeacrh);
+    this.setState({
+      returnedProduct: getProducts.results,
     });
   };
 
@@ -80,6 +96,7 @@ class ProductList extends React.Component {
             key={ categories.id }
             name={ categories.name }
             category={ categories.id }
+            categoryButtton={ this.categoryButtton }
           />))}
         </ul>
         <CartButton />
