@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class SideBar extends React.Component {
   render() {
-    const { Id, name } = this.props;
+    const { Id, name, categoryButtton } = this.props;
     return (
       <aside>
         <button
@@ -11,6 +11,7 @@ class SideBar extends React.Component {
           name="category"
           type="button"
           id={ Id }
+          onClick={ categoryButtton }
         >
           { name }
         </button>
@@ -23,3 +24,4 @@ export default SideBar;
 
 SideBar.propTypes = { Id: PropTypes.string.isRequired };
 SideBar.propTypes = { name: PropTypes.string.isRequired };
+SideBar.propTypes = { categoryButtton: PropTypes.func.isRequired };
