@@ -1,9 +1,33 @@
 import React from 'react';
-import ProductCard from '../components/ProductCard';
+import CardCart from '../components/CardCart';
 
 class ShoppingCart extends React.Component {
+  state = {
+    cart: [],
+  };
+
+  componentDidMount() {
+    this.cartProducts();
+  }
+
+  verifyProduct = (product) => {
+    const { cart } = this.state;
+    if (!cart.includes(product)) {
+      this.setState((oldState) => ({
+        cart: [...oldState.cart, product],
+      }));
+    }
+  };
+
+  cartProducts = () => {
+    const cartFull = JSON.parse(localStorage.getItem('Cart Products'));
+    cartFull.forEach((product) => {
+      this.verifyProduct(product);
+    });
+  };
+
   render() {
-    const cart = JSON.parse(localStorage.getItem('Cart Products'));
+    const { cart } = this.state;
     return (
       <div>
         {cart[0] === undefined
@@ -12,7 +36,8 @@ class ShoppingCart extends React.Component {
               Seu carrinho está vazio
             </p>
           )
-          : cart.map((product) => <ProductCard key={ product.id } product={ product } />)}
+          : cart.map((product) => (
+            <CardCart key={ product.title } product={ product } />))}
       </div>
     );
   }
