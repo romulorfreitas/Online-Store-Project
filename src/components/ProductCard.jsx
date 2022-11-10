@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 
 class ProductCard extends Component {
   render() {
-    const { title, thumbnail, price } = this.props;
+    const { product } = this.props;
+    const { title, thumbnail, price } = product;
+    const obj = {
+      title,
+      thumbnail,
+      price,
+    };
     return (
       <div data-testid="product">
         <h3>{ title }</h3>
@@ -12,14 +18,26 @@ class ProductCard extends Component {
           R$
           { price }
         </p>
+        <button
+          data-testid="product-add-to-cart"
+          type="submit"
+          onClick={ () => {
+            const oldCart = JSON.parse(localStorage.getItem('Cart Products'));
+            localStorage.setItem('Cart Products', JSON.stringify([...oldCart, obj]));
+          } }
+        >
+          Adicionar ao carrinho
+        </button>
       </div>
     );
   }
 }
 
 ProductCard.propTypes = {
-  price: PropTypes.number.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  product: PropTypes.shape({
+    price: PropTypes.number,
+    thumbnail: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
 };
 export default ProductCard;

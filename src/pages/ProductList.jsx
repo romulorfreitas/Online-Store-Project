@@ -16,6 +16,11 @@ class ProductList extends React.Component {
 
   componentDidMount() {
     this.fetchCategories();
+    const oldCart = JSON.parse(localStorage.getItem('Cart Products'));
+    if (oldCart === null) {
+      const cartProducts = [];
+      localStorage.setItem('Cart Products', JSON.stringify(cartProducts));
+    }
   }
 
   onSumbitHandler = async () => {
@@ -86,9 +91,7 @@ class ProductList extends React.Component {
         { !found ? <p>{ notFound }</p> : returnedProduct.map((product) => (
           <ProductCard
             key={ product.id }
-            price={ product.price }
-            title={ product.title }
-            thumbnail={ product.thumbnail }
+            product={ product }
           />))}
       </div>
     );
