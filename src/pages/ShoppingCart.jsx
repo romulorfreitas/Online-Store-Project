@@ -48,6 +48,11 @@ class ShoppingCart extends React.Component {
               </p>
             </section>))
         )}
+        <Link to="/checkout" data-testid="checkout-products">
+          <button type="button">
+            Checkout
+          </button>
+        </Link>
       </div>
     );
   }
