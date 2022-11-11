@@ -4,37 +4,39 @@ import { Link } from 'react-router-dom';
 class ShoppingCart extends React.Component {
   state = {
     products: [],
+    stringOfStorage: 'Cart Products',
   };
 
   componentDidMount() {
-    const getLocalStorage = localStorage.getItem('Cart Products');
+    const { stringOfStorage } = this.state;
+    const getLocalStorage = localStorage.getItem(stringOfStorage);
     const returnGet = JSON.parse(getLocalStorage);
     this.setState({
       products: returnGet,
     });
   }
 
-  componentDidUpdate() {
-
-  }
+  setLocalStorage = (key, value) => {
+    localStorage.setItem(key, value);
+  };
 
   decreaseQnt = (id) => {
-    const { products } = this.state;
+    const { products, stringOfStorage } = this.state;
     const cartTotal = products.filter((product) => (product.id === id)).slice(1);
     const cutCart = products.filter((product) => product.id !== id);
     const newCart = [...cutCart, ...cartTotal];
     const stringedCart = JSON.stringify(newCart);
-    localStorage.setItem('Cart Products', stringedCart);
+    this.setLocalStorage(stringOfStorage, stringedCart);
     this.setState({ products: newCart });
   };
 
   increaseQnt = (id) => {
-    const { products } = this.state;
+    const { products, stringOfStorage } = this.state;
     const cartTotal = products.filter((product) => (product.id === id));
     const cutCart = products.filter((product) => product.id !== id);
     const newCart = [...cutCart, ...cartTotal, cartTotal[0]];
     const stringedCart = JSON.stringify(newCart);
-    localStorage.setItem('Cart Products', stringedCart);
+    this.setLocalStorage(stringOfStorage, stringedCart);
     this.setState({ products: newCart });
   };
 
@@ -42,7 +44,7 @@ class ShoppingCart extends React.Component {
     const { products } = this.state;
     const cartTotal = products.filter((product) => product.id !== id);
     const stringedCart = JSON.stringify(cartTotal);
-    localStorage.setItem('Cart Products', stringedCart);
+    this.setLocalStorage('Cart Products', stringedCart);
     this.setState({ products: cartTotal });
   };
 
