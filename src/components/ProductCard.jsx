@@ -24,6 +24,7 @@ class ProductCard extends Component {
         <Link
           to={ `/product/${id}` }
           data-testid="product-detail-link"
+          item={ product }
         >
           Ver Detalhes
         </Link>

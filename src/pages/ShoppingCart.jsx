@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 
 class ShoppingCart extends React.Component {
   state = {
-    products: null,
+    products: [],
   };
 
   componentDidMount() {
-    // this.cartProducts();
     const getLocalStorage = localStorage.getItem('Cart Products');
     const returnGet = JSON.parse(getLocalStorage);
     this.setState({
@@ -32,7 +31,7 @@ class ShoppingCart extends React.Component {
           </button>
         </Link>
         {
-          products === null
+          products[0] === undefined
             && <p data-testid="shopping-cart-empty-message"> Seu carrinho está vazio</p>
         }
         { products && (
