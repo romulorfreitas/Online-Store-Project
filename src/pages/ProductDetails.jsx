@@ -22,6 +22,13 @@ class ProductDetails extends Component {
 
   render() {
     const { product } = this.state;
+    const { title, thumbnail, price, id } = product;
+    const obj = {
+      title,
+      thumbnail,
+      price,
+      id,
+    };
     return (
       <div>
         <h3 data-testid="product-detail-name">{ product.title }</h3>
@@ -34,6 +41,16 @@ class ProductDetails extends Component {
           R$
           { product.price }
         </p>
+        <button
+          data-testid="product-detail-add-to-cart"
+          type="submit"
+          onClick={ () => {
+            const oldCart = JSON.parse(localStorage.getItem('Cart Products'));
+            localStorage.setItem('Cart Products', JSON.stringify([...oldCart, obj]));
+          } }
+        >
+          Adicionar ao carrinho
+        </button>
         <CartButton />
       </div>
     );
