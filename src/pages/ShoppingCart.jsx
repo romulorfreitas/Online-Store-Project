@@ -1,43 +1,54 @@
 import React from 'react';
-import CardCart from '../components/CardCart';
+import { Link } from 'react-router-dom';
 
 class ShoppingCart extends React.Component {
   state = {
-    cart: [],
+    products: null,
   };
 
   componentDidMount() {
-    this.cartProducts();
+    // this.cartProducts();
+    const getLocalStorage = localStorage.getItem('Cart Products');
+    const returnGet = JSON.parse(getLocalStorage);
+    this.setState({
+      products: returnGet,
+    });
   }
 
-  verifyProduct = (product) => {
-    const { cart } = this.state;
-    if (!cart.includes(product)) {
-      this.setState((oldState) => ({
-        cart: [...oldState.cart, product],
-      }));
-    }
-  };
-
-  cartProducts = () => {
-    const cartFull = JSON.parse(localStorage.getItem('Cart Products'));
-    cartFull.forEach((product) => {
-      this.verifyProduct(product);
-    });
+  productRender = () => {
+    const { products } = this.state;
+    const makeStringfy = products.map(JSON.stringify);
+    const oneProduct = new Set(makeStringfy);
+    return Array.from(oneProduct).map(JSON.parse);
   };
 
   render() {
-    const { cart } = this.state;
+    const { products } = this.state;
     return (
       <div>
-        {cart[0] === undefined
-          ? (
-            <p data-testid="shopping-cart-empty-message">
-              Seu carrinho está vazio
-            </p>
-          )
-          : cart.map((product) => (
-            <CardCart key={ product.title } product={ product } />))}
+        <Link to="/">
+          <button type="button">
+            Home
+          </button>
+        </Link>
+        {
+          products === null
+            && <p data-testid="shopping-cart-empty-message"> Seu carrinho está vazio</p>
+        }
+        { products && (
+          this.productRender().map((item, index) => (
+            <section key={ index }>
+              <p data-testid="shopping-cart-product-name">{item.title}</p>
+              <img src={ item.thumbnail } alt={ item.title } />
+              <p>
+                R$
+                {item.price}
+              </p>
+              <p data-testid="shopping-cart-product-quantity">
+                {products.filter((pd) => pd.id === item.id).length}
+              </p>
+            </section>))
+        )}
       </div>
     );
   }
